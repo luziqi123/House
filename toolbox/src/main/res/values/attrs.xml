@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 圆角ViewGroup属性 -->
+    <declare-styleable name="RoundLayout">
+        <attr name="round" format="dimension"/>
+        <attr name="left_top_round" format="dimension"/>
+        <attr name="right_top_round" format="dimension"/>
+        <attr name="left_bottom_round" format="dimension"/>
+        <attr name="right_bottom_round" format="dimension"/>
+    </declare-styleable>
+
+    <!-- 圆角ImageView -->
+    <declare-styleable name="RoundImageView">
+        <attr name="left_top_radius" format="dimension" />
+        <attr name="right_top_radius" format="dimension" />
+        <attr name="left_bottom_radius" format="dimension" />
+        <attr name="right_bottom_radius" format="dimension" />
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+        <attr name="oval" format="boolean" />
+        <attr name="android:scaleType" />
+    </declare-styleable>
+
+</resources>
