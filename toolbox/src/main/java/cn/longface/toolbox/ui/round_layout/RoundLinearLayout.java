@@ -11,7 +11,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-import cn.yingtaoapp.android.commons.R;
+import cn.longface.toolbox.R;
 
 
 /**

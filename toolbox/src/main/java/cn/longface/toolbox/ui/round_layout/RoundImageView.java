@@ -23,7 +23,8 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.util.AttributeSet;
 
-import cn.yingtaoapp.android.commons.R;
+import cn.longface.toolbox.R;
+
 
 /**
  * 圆角ImageView
