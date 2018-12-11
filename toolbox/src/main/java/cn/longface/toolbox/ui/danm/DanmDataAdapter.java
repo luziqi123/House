@@ -12,23 +12,24 @@ import java.util.List;
  */
 public abstract class DanmDataAdapter<D> {
 
+    /**
+     * 需要显示的弹幕数据集合
+     * 如果是实时显示的话这个集合用不到
+     */
     private List<D> mDanmData = new ArrayList<>();
-    private DanmConfig mConfig;
 
-    public DanmDataAdapter() {
-    }
+    /**
+     * Holder的缓存
+     */
+    private ArrayList<DanmItemHolder<D>> mDanmHolderCache = new ArrayList<>();
 
-    void setConfig(DanmConfig config) {
-        mConfig = config;
-    }
+    /**
+     * 弹幕显示控件
+     */
+    private DanmView<D> mDanmView;
 
-    public void addData(List<D> data) {
-        mDanmData.addAll(data);
-    }
-
-    public void setData(List<D> data) {
-        mDanmData.clear();
-        mDanmData.addAll(data);
+    public void setDanmView(DanmView<D> danmView) {
+        mDanmView = danmView;
     }
 
     /**
@@ -39,21 +40,25 @@ public abstract class DanmDataAdapter<D> {
      * @param data
      */
     public void addOneData(D data) {
-        if (mConfig.realTime) {
+        if (mDanmView.getConfig().realTime) {
             // TODO 马上显示
         } else {
             // TODO 加入消息集合
         }
     }
 
+    /**
+     * 创建DanmHolder的时候调用
+     * @param data
+     */
+    public abstract void onCreateHolder(D data);
 
     /**
      * 有消息被Pop出去的时候调用
      * @param holder 正要显示的ViewHolder
      * @param data 对应的数据对象
-     * @param position 第几个
      */
-    public abstract void onPop(DanmItemHolder holder , D data , int position);
+    public abstract void onPop(DanmItemHolder holder , D data);
 
     /**
      * 下一条消息显示出来的时间

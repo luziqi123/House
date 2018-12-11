@@ -1,5 +1,7 @@
 package cn.longface.toolbox.ui.danm;
 
+import java.util.Random;
+
 /**
  * 弹幕的设置类
  */
@@ -37,5 +39,13 @@ public class DanmConfig {
     public static int STRATIGY_OVERLAP = 0;
     // 仍旧保持依次显示
     public static int STRATIGY_IN_TURN = 1;
+
+    public int getAnimDuration() {
+        if (uniform) {
+            return animDuration;
+        } else {
+            return animDuration + new Random().nextInt(1000);
+        }
+    }
 
 }
