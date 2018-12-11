@@ -1,17 +1,15 @@
 package cn.longface.house;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.longface.toolbox.ui.T;
-import cn.longface.toolbox.ui.list.ItemClickCallback;
-import cn.longface.toolbox.ui.list.SimpleBaseAdapter;
-import cn.longface.toolbox.ui.list.SimpleBaseHolder;
+import cn.longface.toolbox.ui.danm.DanmDataAdapter;
+import cn.longface.toolbox.ui.danm.DanmView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,43 +18,42 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = findViewById(R.id.rl);
-        SimpleBaseAdapter<SimpleBaseHolder<String>, String> adapter =
-                new SimpleBaseAdapter<SimpleBaseHolder<String>, String>(this) {
-                    @Override
-                    protected int getLayoutRec(int viewType) {
-                        return R.layout.item_room;
-                    }
-
-                    @Override
-                    protected SimpleBaseHolder getViewHolder(View inflate, int viewType) {
-                        return new SimpleBaseHolder(inflate) {
-                            @Override
-                            protected void initView() {
-
-                            }
-
-                            @Override
-                            protected void inflaterData() {
-
-                            }
-                        };
-                    }
-
-                };
-
-        adapter.setItemClickCall(new ItemClickCallback<String>() {
+        DanmView<String> danmView = findViewById(R.id.danm);
+        final DanmDataAdapter<String> danmDataAdapter = new DanmDataAdapter<String>() {
             @Override
-            public void onItemClick(int position, View view, String data) {
-                T.showShort(MainActivity.this , position + " == " + data);
-            }
-        });
-        recyclerView.setAdapter(adapter);
+            public DanmItemHolder<String> createHolder(String data) {
+                TextView textView = new TextView(MainActivity.this);
+                textView.setTextSize(30);
+                textView.setTextColor(Color.BLACK);
+                return new DanmItemHolder<String>(textView) {
+                    @Override
+                    protected void initView() {
 
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            list.add(new String("asdfasdf"));
-        }
-        adapter.setData(list);
+                    }
+
+                    @Override
+                    public void onBind(String s) {
+                        TextView textView1 = (TextView) rootView;
+                        textView1.setText(s);
+                    }
+                };
+            }
+        };
+        danmView.bindAdapter(danmDataAdapter);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SystemClock.sleep(2000);
+                for (int i = 0; i < 10; i++) {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            danmDataAdapter.addOneData("asdfasdf");
+                        }
+                    });
+                    SystemClock.sleep(1000);
+                }
+            }
+        }).start();
     }
 }

@@ -3,6 +3,7 @@ package cn.longface.toolbox.ui.danm;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -21,14 +22,14 @@ public abstract class DanmDataAdapter<D> {
     /**
      * Holder的缓存
      */
-    private ArrayList<DanmItemHolder<D>> mDanmHolderCache = new ArrayList<>();
+    private LinkedList<DanmItemHolder<D>> mDanmHolderCache = new LinkedList<>();
 
     /**
      * 弹幕显示控件
      */
     private DanmView<D> mDanmView;
 
-    public void setDanmView(DanmView<D> danmView) {
+    void setDanmView(DanmView<D> danmView) {
         mDanmView = danmView;
     }
 
@@ -40,10 +41,16 @@ public abstract class DanmDataAdapter<D> {
      * @param data
      */
     public void addOneData(D data) {
-        if (mDanmView.getConfig().realTime) {
-            // TODO 马上显示
+        DanmItemHolder<D> holder = getOrCreateHolder(data);
+        holder.onBind(data);
+        mDanmView.popMsg(holder);
+    }
+
+    DanmItemHolder<D> getOrCreateHolder(D data) {
+        if (mDanmHolderCache.size() > 0) {
+            return mDanmHolderCache.remove();
         } else {
-            // TODO 加入消息集合
+            return createHolder(data);
         }
     }
 
@@ -51,21 +58,21 @@ public abstract class DanmDataAdapter<D> {
      * 创建DanmHolder的时候调用
      * @param data
      */
-    public abstract void onCreateHolder(D data);
+    protected abstract DanmItemHolder<D> createHolder(D data);
 
     /**
      * 有消息被Pop出去的时候调用
      * @param holder 正要显示的ViewHolder
      * @param data 对应的数据对象
      */
-    public abstract void onPop(DanmItemHolder holder , D data);
+//    public abstract void onPop(DanmItemHolder holder , D data);
 
     /**
      * 下一条消息显示出来的时间
      * @param d
      * @return
      */
-    public abstract long getNextTime(D d);
+//    public abstract long getNextTime(D d);
 
 
 
