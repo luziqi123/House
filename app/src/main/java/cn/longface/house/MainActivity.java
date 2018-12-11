@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import cn.longface.toolbox.ui.danm.DanmDataAdapter;
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
                 TextView textView = new TextView(MainActivity.this);
                 textView.setTextSize(30);
                 textView.setTextColor(Color.BLACK);
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+                textView.setLayoutParams(params);
                 return new DanmItemHolder<String>(textView) {
                     @Override
                     protected void initView() {
@@ -44,14 +47,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 SystemClock.sleep(2000);
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 200; i++) {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
                             danmDataAdapter.addOneData("asdfasdf");
                         }
                     });
-                    SystemClock.sleep(1000);
+                    SystemClock.sleep(200);
                 }
             }
         }).start();

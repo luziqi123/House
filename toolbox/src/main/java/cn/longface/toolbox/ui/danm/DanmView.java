@@ -125,23 +125,27 @@ public class DanmView<D> extends FrameLayout{
      * @param holder 控件持有者
      * @param availabalLine 在第几行显示 , 如果是-1就随机一个数
      */
-    private void show(DanmDataAdapter.DanmItemHolder holder, final int availabalLine) {
+    private void show(final DanmDataAdapter.DanmItemHolder holder, final int availabalLine) {
         final View view = holder.getView();
+        view.setVisibility(INVISIBLE);
         this.addView(view);
-        FrameLayout.LayoutParams params = (LayoutParams) view.getLayoutParams();
-        params.width = LayoutParams.WRAP_CONTENT;
-        params.height = LayoutParams.WRAP_CONTENT;
-        int w = View.MeasureSpec.makeMeasureSpec(0,
-                View.MeasureSpec.UNSPECIFIED);
-        int h = View.MeasureSpec.makeMeasureSpec(0,
-                View.MeasureSpec.UNSPECIFIED);
-        view.measure(w, h);
+        if (availabalLine >= 0) {
+            mAvailabal[availabalLine] = false;
+        }
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                _show(view , holder , availabalLine);
+            }
+        });
+    }
+
+    void _show(View view , DanmDataAdapter.DanmItemHolder holder, int availabalLine) {
         if (availabalLine == -1) {
             float randomF = new Random().nextFloat();
             view.setX(getWidth());
             view.setY(getHeight() * (randomF > 0.8f ? randomF - 0.2f : randomF));
         } else {
-            mAvailabal[availabalLine] = false;
             view.setX(getWidth());
             view.setY(availabalLine * view.getMeasuredHeight());
         }
@@ -165,7 +169,7 @@ public class DanmView<D> extends FrameLayout{
 
         @Override
         public void onReleaseLine(int line) {
-            if (mAvailabal.length > line && line > 0) {
+            if (mAvailabal.length > line && line >= 0) {
                 mAvailabal[line] = true;
             }
         }
@@ -183,6 +187,7 @@ public class DanmView<D> extends FrameLayout{
         int line;
         ValueAnimator animator;
         OnFinishCallback callback;
+        boolean isReleasLine = false;
 
         /**
          * @param view     需要显示出来的View
@@ -215,11 +220,18 @@ public class DanmView<D> extends FrameLayout{
         public void onAnimationUpdate(ValueAnimator valueAnimator) {
             float f = (float) valueAnimator.getAnimatedValue();
             view.setX(f);
-            if (view.getX() + view.getMeasuredWidth() < viewGroup.getWidth() + 20) {
+            if (!isReleasLine && view.getX() + view.getMeasuredWidth() < viewGroup.getWidth()) {
+                isReleasLine = true;
                 if (callback != null) {
                     callback.onReleaseLine(line);
                 }
             }
+        }
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+            super.onAnimationStart(animation);
+            view.setVisibility(VISIBLE);
         }
 
         @Override
