@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import cn.longface.toolbox.ui.danm.DanmConfig;
 import cn.longface.toolbox.ui.danm.DanmDataAdapter;
 import cn.longface.toolbox.ui.danm.DanmView;
 
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         DanmView<String> danmView = findViewById(R.id.danm);
+        danmView.getConfig().stratigy = DanmConfig.STRATIGY_OVERLAP;
         final DanmDataAdapter<String> danmDataAdapter = new DanmDataAdapter<String>() {
             @Override
             public DanmItemHolder<String> createHolder(String data) {
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                             danmDataAdapter.addOneData("asdfasdf");
                         }
                     });
-                    SystemClock.sleep(200);
+                    SystemClock.sleep(20);
                 }
             }
         }).start();

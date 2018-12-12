@@ -86,7 +86,7 @@ public class DanmView<D> extends FrameLayout{
     }
 
     /* 获取可用行 */
-    private int getAvailabalLine() {
+    private int getAvailableLine() {
         for (int i = 0; i < mAvailabal.length; i++) {
             if (mAvailabal[i]) {
                 return i;
@@ -102,10 +102,10 @@ public class DanmView<D> extends FrameLayout{
      */
     void popMsg(DanmDataAdapter.DanmItemHolder<D> holder) {
         // 获取一个可用的空间
-        int availabalLine = getAvailabalLine();
-        if (availabalLine >= 0) {
+        int availableLine = getAvailableLine();
+        if (availableLine >= 0) {
             // 有空间 直接显示
-            show(holder , availabalLine);
+            show(holder , availableLine);
         } else {
             // 没有空间 , 根据策略显示新的弹幕
             if (mConfig.stratigy == DanmConfig.STRATIGY_IN_TURN) {
@@ -135,12 +135,13 @@ public class DanmView<D> extends FrameLayout{
         view.post(new Runnable() {
             @Override
             public void run() {
-                _show(view , holder , availabalLine);
+                _show(holder , availabalLine);
             }
         });
     }
 
-    void _show(View view , DanmDataAdapter.DanmItemHolder holder, int availabalLine) {
+    void _show(DanmDataAdapter.DanmItemHolder holder, int availabalLine) {
+        View view = holder.getView();
         if (availabalLine == -1) {
             float randomF = new Random().nextFloat();
             view.setX(getWidth());
